@@ -9,7 +9,7 @@ const WalletConnect = () => {
   const [account, setAccount] = useState([]);
   const [chainId, setChainId] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [accountNouce, setAccountNouce] = useState(0);
+  const [accountNouce, setAccountNouce] = useState(null);
   const [isValidAddress, setIsValidAddress] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [inputAddress, setInputAddress] = useState("");
