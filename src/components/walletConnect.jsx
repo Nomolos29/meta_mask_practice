@@ -154,7 +154,7 @@ const WalletConnect = () => {
           </div>
           <main className='w-full space-y-3'>
             {account.map((address, index) => (
-              <div key={index} onClick={isConnected == true ? () => handleBalanceCheck(index) : handleWalletConnect}className={`w-full px-3 py-2 font-medium text-sm shadow-md flex justify-between items-center rounded-lg ${(address == "" || !isValidAddress) ? "bg-red-500 text-gray-50" : "cursor-pointer"}`}>
+              <div key={index} onClick={() => handleBalanceCheck(index)}className={`w-full px-3 py-2 font-medium text-sm shadow-md flex justify-between items-center rounded-lg ${(address == "" || !isValidAddress) ? "bg-red-500 text-gray-50" : "cursor-pointer"}`}>
                 {(address == "" || !isValidAddress) ? "Please input a valid Address to check it's balance" : address}
                 <span><LuWallet /></span>
               </div>
