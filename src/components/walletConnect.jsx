@@ -8,7 +8,9 @@ const WalletConnect = () => {
   const [balance, setBalance] = useState(null);
   const [account, setAccount] = useState([]);
   const [chainId, setChainId] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
   const [accountNouce, setAccountNouce] = useState(0);
+  const [isValidAddress, setIsValidAddress] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [inputAddress, setInputAddress] = useState("");
   
@@ -16,7 +18,7 @@ const WalletConnect = () => {
   const unitOfEth = Math.pow(10, 18);
   const ethBalance = parseInt(balance) / unitOfEth;
 
-
+  
 
   let accounts;
   let accountBalance;
@@ -29,19 +31,29 @@ const WalletConnect = () => {
 
   const ethereum = window.ethereum;
   const handleWalletConnect = async () => {
-    try {
-      accounts = await ethereum.request({method: 'eth_requestAccounts'});
-      setAccount(accounts);
+    
+    setIsValidAddress(true);
 
-      setChainId(await ethereum.request({method: 'eth_chainId'}));
+    if(isConnected == false){
+      try {
+        accounts = await ethereum.request({method: 'eth_requestAccounts'});
+        setAccount(accounts);
 
-      setAccountNouce(await ethereum.request({ method: 'eth_getTransactionCount', params:[accounts[index]] }))
-      
-      console.log(accounts);
-    } catch (error) {
-      console.log(error)
-    }
+        setChainId(await ethereum.request({method: 'eth_chainId'}));
 
+        setAccountNouce(await ethereum.request({ method: 'eth_getTransactionCount', params:[accounts[index]] }))
+
+        setIsConnected(!isConnected);
+        
+        console.log(accounts);
+        // setIsValidAddress(true);
+
+      } catch (error) {
+        console.log(error)
+      }
+    }else {
+      return isConnected;
+    }  
   }
 
   const handleBalanceCheck = async (index) => {
@@ -82,23 +94,34 @@ const WalletConnect = () => {
     handleWalletConnect();
   }
 
+  const isValidEthereumAddress = (address) => {
+    const regex = /^0x[a-fA-F0-9]{40}$/;
+    return regex.test(address);
+  };
 
   const handleGetBalance = (event) => {
     event.preventDefault();
 
+    // if (inputValue !== "" && isConnected) {
+    //   handleWalletConnect();
+    // }  
+
+    
     setInputAddress("");
     setAccountNouce(null)
-
+    
     console.log(inputValue);
     
     let accountArray = [];
     accountArray.push(inputValue)
+    setIsValidAddress(isValidEthereumAddress(accountArray[0]));
   
     handleChangeInAccount(accountArray);
     // setInputAddress(inputValue);
 
 
     setInputValue("");
+    // setIsValidAddress(true)
 
   }
 
@@ -131,7 +154,10 @@ const WalletConnect = () => {
           </div>
           <main className='w-full space-y-3'>
             {account.map((address, index) => (
-              <div key={index} onClick={() => handleBalanceCheck(index)}className={`w-full cursor-pointer px-3 py-2 font-medium text-sm shadow-md flex justify-between items-center rounded-lg ${address == "" ? "bg-red-500 text-gray-50" : ""}`}>{address == "" ? "Please input an Address to check it's balance" : address}<span><LuWallet /></span></div>
+              <div key={index} onClick={() => handleBalanceCheck(index)}className={`w-full px-3 py-2 font-medium text-sm shadow-md flex justify-between items-center rounded-lg ${(address == "" || !isValidAddress) ? "bg-red-500 text-gray-50" : "cursor-pointer"}`}>
+                {(address == "" || !isValidAddress) ? "Please input a valid Address to check it's balance" : address}
+                <span><LuWallet /></span>
+              </div>
             ))}
             <button onClick={handleWalletConnect} className='text-xl font-medium py-2 px-4 bg-white/50 text-gray-500 shadow-md border-[1px] hover:bg-gray-400 hover:text-gray-50 rounded-lg'>Connect Wallet</button>
           </main>
@@ -144,7 +170,7 @@ const WalletConnect = () => {
               <span className='h-6 px-2 bg-gray-300 shadow-md font-medium text-gray-500 flex justify-center items-center rounded-full'>{accountNouce}</span>
             </span>
             <span className='text-right space-y-4'>
-              <h1 className='text-4xl text-white font-bold'>{`${ethBalance.toFixed(2)}`}</h1>
+              <h1 className='text-4xl text-white font-bold'>{ethBalance.toFixed(2)}</h1>
               <p className='text-sm text-gray-400 font-medium'>{inputAddress}</p>
             </span>
           </span>
