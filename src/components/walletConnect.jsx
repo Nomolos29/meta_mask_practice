@@ -19,9 +19,9 @@ const WalletConnect = () => {
   let accountBalance;
   let chainName;
 
-  chains.map((ID) => {
-    chainId == ID.chainID ? chainName = ID.name : chainName = chainId
-  })
+  const chainObject = chains.find((ID) => ID.chainID === chainId);
+
+  chainObject ? chainName = chainObject.name : chainId;
 
 
   const ethereum = window.ethereum;
@@ -82,7 +82,7 @@ const WalletConnect = () => {
   ethereum.on('accountsChanged', handleChangeInAccount);
   ethereum.on('chainChanged', handleOnChainChange);
 
-  // ethereum.removeListener('accountsChanged', handleChangeInAccount)
+  // ethereum.removeListner('accountsChanged', handleChangeInAccount)
 
 
   const cardContainer = " w-[400px] h-[400px]";
