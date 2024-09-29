@@ -1,21 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import chains from "../../chains.json";
 
 const WalletConnect = () => {
 
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState(null);
   const [account, setAccount] = useState([]);
   const [chainId, setChainId] = useState(null);
+  const [accountNouce, setAccountNouce] = useState(0)
   const [inputAddress, setInputAddress] = useState("");
+  
+
+  const unitOfEth = Math.pow(10, 18);
+  const ethBalance = parseInt(balance) / unitOfEth;
+
+
 
   let accounts;
   let accountBalance;
+  let chainName;
+
+  chains.map((ID) => {
+    chainId == ID.chainID ? chainName = ID.name : chainName = chainId
+  })
+
 
   const ethereum = window.ethereum;
   const handleWalletConnect = async () => {
     try {
       accounts = await ethereum.request({method: 'eth_requestAccounts'});
       setAccount(accounts);
+
       setChainId(await ethereum.request({method: 'eth_chainId'}));
+
+      setAccountNouce(await ethereum.request({ method: 'eth_getTransactionCount', params:[accounts[index]] }))
+      
       console.log(accounts);
     } catch (error) {
       console.log(error)
@@ -28,19 +46,47 @@ const WalletConnect = () => {
     try {
       accountBalance = await ethereum.request({method: 'eth_getBalance', params: [account[index]]});
       setBalance(accountBalance);
+
+      handleAccountNouce(index);
     } catch (error) {
       console.log(error.message);
     }
     setInputAddress(account[index]);
   }
 
+  const handleAccountNouce = async(index) => {
+    try {
+
+      let nouce = await ethereum.request({ method: 'eth_getTransactionCount', params:[account[index]] })
+      setAccountNouce(nouce);
+      console.log(nouce);
+
+    } catch (error) {
+      console.log(error.message)
+    }
+    
+  }
+
+  const handleChangeInAccount = (currentAccount) => {
+
+    setAccount(currentAccount);
+
+    setBalance(parseInt(currentAccount))
+
+  }
+
+  const handleOnChainChange = () => {
+    handleWalletConnect();
+  }
+
+  ethereum.on('accountsChanged', handleChangeInAccount);
+  ethereum.on('chainChanged', handleOnChainChange);
+
+  // ethereum.removeListener('accountsChanged', handleChangeInAccount)
+
 
   const cardContainer = " w-[400px] h-[400px]";
 
-
-  const unitOfEth = Math.pow(10, 18);
-  const ethBalance = parseInt(balance) / unitOfEth;
-  console.log(ethBalance);
   
 
 
@@ -62,11 +108,12 @@ const WalletConnect = () => {
 
         <section className={`${cardContainer} flex flex-col justify-between`}>
           <span className='flex flex-col bg-gradient-to-br from-gray-300 to-gray-600 rounded-xl justify-between h-[60%] py-10 px-6'>
-            <span>
-              <h4>{chainId}</h4>
+            <span className='flex justify-between'>
+              <h4 className='text-lg font-medium text-gray-200/60'>{chainName}</h4>
+              <span className='h-6 px-2 bg-gray-300 shadow-md font-medium text-gray-500 flex justify-center items-center rounded-full'>{accountNouce}</span>
             </span>
             <span className='text-right space-y-4'>
-              <h1 className='text-4xl text-white font-bold'>{`${ethBalance.toFixed(4)}`}</h1>
+              <h1 className='text-4xl text-white font-bold'>{`${ethBalance.toFixed(2)}`}</h1>
               <p className='text-sm text-gray-400 font-medium'>{inputAddress}</p>
             </span>
           </span>

@@ -1,0 +1,27 @@
+[
+  {
+    "chainID":"0xaa36a7",
+    "name": "Sepolia"
+  },
+  {
+    "chainID":"0x12c",
+    "name": "zkSync Sepolia Testnet"
+  },
+  {
+    "chainID":"0x2105",
+    "name": "Base"
+  },
+  {
+    "chainID":"0x1",
+    "name": "Ethereum"
+  },
+  {
+    "chainID":"0xe708",
+    "name": "Linea Mainnet"
+  },
+  {
+    "chainID":"0xe705",
+    "name": "Linea Sepolia"
+  }
+  
+]
