@@ -138,11 +138,11 @@ const WalletConnect = () => {
 
 
   return (
-    <main className='flex w-screen h-screen justify-center items-center'>
+    <main className='flex w-screen h-screen justify-center items-center bg-gray-700'>
 
       <span className='flex items-center justify-center gap-x-10'>
 
-        <section className={`${cardContainer} shadow-lg border-[1px] overflow-hidden rounded-xl p-5 flex flex-col justify-between items-start`}>
+        <section className={`${cardContainer} bg-white border-[1px] overflow-hidden rounded-xl p-5 flex flex-col justify-between items-start`}>
           <div className='flex flex-col w-full'>
             <h1 className='text-4xl font-bold text-gray-400'>Accounts</h1>
             <form onSubmit={handleGetBalance} className='flex justify-between w-full gap-x-3'>
@@ -166,7 +166,7 @@ const WalletConnect = () => {
         <section className={`${cardContainer} flex flex-col justify-between`}>
           <span className='flex flex-col bg-gradient-to-br from-gray-300 to-gray-600 rounded-xl justify-between h-[60%] py-10 px-6'>
             <span className='flex justify-between'>
-              <h4 className='text-lg font-medium text-gray-200/60'>{chainName}</h4>
+              <h4 className='text-lg font-medium text-gray-200/90'>{chainName}</h4>
               <span className='h-6 px-2 bg-gray-300 shadow-md font-medium text-gray-500 flex justify-center items-center rounded-full'>{accountNouce}</span>
             </span>
             <span className='text-right space-y-4'>
@@ -174,7 +174,7 @@ const WalletConnect = () => {
               <p className='text-sm text-gray-400 font-medium'>{inputAddress}</p>
             </span>
           </span>
-          <span className='rounded-xl p-5 shadow-lg h-[35%] border-[1px]'>
+          <span className='rounded-xl bg-white p-5 h-[35%] border-[1px]'>
             <h3 className='font-medium'>Transactions</h3>
           </span>
         </section>
